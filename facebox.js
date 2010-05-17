@@ -9,6 +9,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *
  * Copyright 2007, 2008 Chris Wanstrath [ chris@ozmm.org ]
+ * Copyright 2010 Andrew Smith [ espadav8@gmail.com ]
  *
  * Usage:
  *
@@ -68,7 +69,7 @@
  */
 (function($) {
   $.facebox = function(data, klass) {
-    $.facebox.loading()
+    $.facebox.loading( data )
 
     if (data.ajax) fillFaceboxFromAjax(data.ajax, klass)
     else if (data.image) fillFaceboxFromImage(data.image, klass)
@@ -101,11 +102,6 @@
               <td class="body"> \
                 <div class="content"> \
                 </div> \
-                <div class="footer"> \
-                  <a href="#" class="close"> \
-                    <img src="/facebox/closelabel.gif" title="close" class="close_image" /> \
-                  </a> \
-                </div> \
               </td> \
               <td class="b"/> \
             </tr> \
@@ -115,15 +111,27 @@
           </tbody> \
         </table> \
       </div> \
-    </div>'
+    </div>',
+		closeHtml : '\
+			<div class="footer"> \
+				<a href="#" class="close"> \
+					<img src="/facebox/closelabel.gif" title="close" class="close_image" /> \
+				</a> \
+			</div>'
     },
 
-    loading: function() {
+    loading: function( data ) {
       init()
       if ($('#facebox .loading').length == 1) return true
       showOverlay()
 
       $('#facebox .content').empty()
+	  if( ( data.close != false ) && ( $( '#facebox .footer' ).size() == 0 ) )
+	  {
+		  $('#facebox .content').after( $.facebox.settings.closeHtml );
+	  } else if ( ( data.close == false ) && $( '#facebox .footer' ).size() > 0 ) {
+		  $( '#facebox .footer' ).remove();
+	  }
       $('#facebox .body').children().hide().end().
         append('<div class="loading"><img src="'+$.facebox.settings.loadingImage+'"/></div>')
 
