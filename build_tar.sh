@@ -6,7 +6,8 @@ fi
 
 mkdir facebox
 cp {b,bl,br,tl,tr}.png facebox
-cp {loading,closelabel}.gif facebox
+cp loading.gif facebox
+cp closelabel.png facebox
 cp facebox.{js,css} facebox
 cp README.txt facebox
 tar -cf facebox-$1.tar facebox/
